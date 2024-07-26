@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-researcher</title>
+    <title>SearchWizard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -197,7 +197,7 @@
 <body>
     <div id="app-container">
         <header>
-            <h1>🚀 AI-researcher</h1>
+            <h1>🚀 SearchWizard</h1>
         </header>
         <div id="chat-container">
             <div id="chat-messages"></div>
@@ -310,7 +310,7 @@ async function handleUserInput() {
         const answerResponse = await axios.get('https://abhaykoul-api.hf.space/api/llm', {
             params: {
                 model: 'Qwen/Qwen2-72B-Instruct',
-                message: `Question: ${question}\n\nSearch Results: ${JSON.stringify(searchResults)}\n\nPlease provide a comprehensive answer to the question based on the search results and webpage contents above. Include relevant webpage URLs in your answer when appropriate. If the search results and webpage contents don't contain relevant information, please state that and provide the best answer you can based on your general knowledge. [YOUR RESPONSE WITH SOURCE LINKS ([➊](URL))`
+                message: `Question: ${question}\n\nSearch Results: ${JSON.stringify(searchResults)}\n\nPlease provide a comprehensive answer to the question based on the search results and webpage contents above. If the search results and webpage contents don't contain relevant information, please state that and provide the best answer you can based on your general knowledge.`
             }
         });
 
@@ -372,7 +372,7 @@ userInput.addEventListener('keypress', (e) => {
 });
 
 // Initial greeting
-addMessage('👋 Welcome to the AI-researcher! I\'m here to help you with any questions you have. Whether it\'s about the latest research, technical queries, or just general information, feel free to ask. Let\'s get started!');
+addMessage('👋 Welcome to the SearchWizard! I\'m here to help you with any questions you have. Whether it\'s about the latest research, technical queries, or just general information, feel free to ask. Let\'s get started!');
     </script>
 </body>
 </html>
