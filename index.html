@@ -3,193 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SearchWizard</title>
+    <title>SearchWizard Pro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6C5CE7;
+            --secondary-color: #FFF0F5;
+            --accent-color: #FF6B6B;
+            --text-color: #2D3436;
+            --light-text-color: #636E72;
+            --border-color: #DFE6E9;
+            --hover-color: #5A4FCF;
+            --error-color: #D63031;
+            --success-color: #00B894;
+            --gradient-start: #A29BFE;
+            --gradient-end: #6C5CE7;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body, html {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             height: 100%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            background-color: var(--secondary-color);
+            color: var(--text-color);
         }
+
         #app-container {
             display: flex;
             flex-direction: column;
             height: 100vh;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            text-align: center;
-            padding: 20px 0;
-            color: #ffffff;
-        }
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeIn 1s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        #chat-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: #fff;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
+
+        header {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        h1 i {
+            margin-right: 0.8rem;
+            font-size: 2rem;
+        }
+
+        #main-content {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        #chat-container {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        #chat-topic {
+            padding: 1.2rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
         #chat-messages {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
+            background-color: var(--secondary-color);
         }
+
         .message {
             max-width: 80%;
-            margin-bottom: 15px;
-            padding: 12px 18px;
-            border-radius: 18px;
-            font-size: 1em;
-            line-height: 1.4;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            animation: fadeIn 0.3s ease;
+            margin-bottom: 1.5rem;
+            padding: 1.2rem 1.8rem;
+            border-radius: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.3s ease-out;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .user-message {
             align-self: flex-end;
-            background-color: #3f51b5;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             color: white;
-            border-bottom-right-radius: 0;
         }
+
         .bot-message {
             align-self: flex-start;
-            background-color: #f5f5f5;
-            color: #333;
-            border-bottom-left-radius: 0;
+            background-color: #ffffff;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
         }
+
         #user-input-container {
             display: flex;
-            padding: 20px;
-            background-color: #f0f0f0;
-            border-top: 1px solid #e0e0e0;
+            padding: 1.5rem 2rem;
+            background-color: #ffffff;
+            border-top: 1px solid var(--border-color);
         }
+
         #user-input {
             flex-grow: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1em;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            font-size: 1rem;
             transition: all 0.3s ease;
+            resize: none;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
+
         #user-input:focus {
             outline: none;
-            box-shadow: 0 0 0 2px #3f51b5;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
         }
+
         #send-button {
-            margin-left: 10px;
-            padding: 0 20px;
-            background: #3f51b5;
+            margin-left: 1rem;
+            padding: 1rem 1.5rem;
+            background: var(--accent-color);
             color: white;
             border: none;
-            border-radius: 25px;
-            font-size: 1em;
+            border-radius: 30px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
+
         #send-button:hover {
-            background: #283593;
+            background-color: #FF5252;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+
+        #sources-container {
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+            background-color: #ffffff;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sources-container h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        #source-links {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .source-card {
+            background-color: var(--secondary-color);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .source-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .source-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .source-title i {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .source-link {
+            display: block;
+            color: var(--light-text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .source-link:hover {
+            color: var(--accent-color);
+        }
+
         .thinking {
             align-self: center;
             font-style: italic;
-            color: #888;
-            background-color: #f0f0f0;
-            border-radius: 15px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
+            color: var(--light-text-color);
+            background-color: #ffffff;
+            border-radius: 30px;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 1rem;
             animation: pulse 1.5s infinite;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
+
         @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+            0% { opacity: 0.6; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(0.98); }
         }
+
         .error-message {
-            align-self: center;
-            background-color: #ff5252;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            text-align: center;
-            max-width: 80%;
+            color: var(--error-color);
+            font-weight: 500;
         }
-        #chat-messages::-webkit-scrollbar {
-            width: 8px;
-        }
-        #chat-messages::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        #chat-messages::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        #chat-messages::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .action-button {
-            padding: 10px 20px;
-            background: #3f51b5;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 10px;
-        }
-        .action-button:hover {
-            background: #283593;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        @media (max-width: 768px) {
-            #app-container {
-                padding: 10px;
+
+        @media (max-width: 1024px) {
+            #main-content {
+                flex-direction: column;
             }
-            h1 {
-                font-size: 2em;
-            }
-            .message {
-                max-width: 90%;
+            #sources-container {
+                width: 100%;
+                max-width: none;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
             }
         }
     </style>
@@ -197,22 +281,29 @@
 <body>
     <div id="app-container">
         <header>
-            <h1>🚀 SearchWizard</h1>
+            <h1><i class="fas fa-hat-wizard"></i> SearchWizard Pro</h1>
         </header>
-        <div id="chat-container">
-            <div id="chat-messages"></div>
-            <div id="user-input-container">
-                <input type="text" id="user-input" placeholder="Ask me anything...">
-                <button id="send-button">Send</button>
+        <div id="main-content">
+            <div id="chat-container">
+                <div id="chat-topic">Topic: Your Search Topic Here</div>
+                <div id="chat-messages"></div>
+                <div id="user-input-container">
+                    <textarea id="user-input" placeholder="Ask me anything..." rows="1"></textarea>
+                    <button id="send-button"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            </div>
+            <div id="sources-container">
+                <h2>Sources</h2>
+                <div id="source-links"></div>
             </div>
         </div>
     </div>
-
-    <script>
-// Main script
+<script>
 const chatMessages = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const sendButton = document.getElementById('send-button');
+const sourceLinks = document.getElementById('source-links');
+const chatTopic = document.getElementById('chat-topic');
 
 let searchResults = null;
 let lastAnswer = null;
@@ -222,14 +313,14 @@ function addMessage(content, isUser = false, isError = false) {
     messageDiv.classList.add('message');
     messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
     if (isError) messageDiv.classList.add('error-message');
-    messageDiv.innerHTML = content;
+    messageDiv.innerHTML = isUser ? escapeHTML(content) : formatMarkdown(content);
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function addThinkingMessage(text) {
     const thinkingDiv = document.createElement('div');
-    thinkingDiv.classList.add('message', 'bot-message', 'thinking');
+    thinkingDiv.classList.add('thinking');
     thinkingDiv.textContent = text;
     chatMessages.appendChild(thinkingDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -239,8 +330,112 @@ function addThinkingMessage(text) {
 function formatSourceLinks(text) {
     let counter = 1;
     return text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, (match, linkText, url) => {
-        return `${linkText} ([${counter++}](${url}))`;
+        return `${linkText} [<a href="${url}" target="_blank">${counter++}</a>]`;
     });
+}
+
+function updateSources(sources) {
+    sourceLinks.innerHTML = '';
+    sources.forEach((source, index) => {
+        const sourceCard = document.createElement('div');
+        sourceCard.classList.add('source-card');
+
+        const sourceTitle = document.createElement('div');
+        sourceTitle.classList.add('source-title');
+        sourceTitle.innerHTML = `<i class="fas fa-link"></i>${escapeHTML(source.title)}`;
+
+        const sourceLink = document.createElement('a');
+        sourceLink.href = source.href;
+        sourceLink.textContent = source.href;
+        sourceLink.classList.add('source-link');
+        sourceLink.target = '_blank';
+
+        sourceCard.appendChild(sourceTitle);
+        sourceCard.appendChild(sourceLink);
+        sourceLinks.appendChild(sourceCard);
+    });
+}
+
+function updateTopic(topic) {
+    chatTopic.textContent = `Topic: ${topic}`;
+}
+
+function formatMarkdown(text) {
+    // Handle code blocks
+    text = text.replace(/```(\w+)?\n([\s\S]+?)\n```/g, '<pre><code class="language-$1">$2</code></pre>');
+
+    // Handle inline code
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    // Handle bold
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+    // Handle italic
+    text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+    // Handle links
+    text = text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+    // Handle unordered lists
+    text = text.replace(/^\s*[-*+]\s+(.+)$/gm, '<li>$1</li>');
+    text = text.replace(/<li>(.+?)<\/li>/g, '<ul><li>$1</li></ul>');
+
+    // Handle ordered lists
+    text = text.replace(/^\s*\d+\.\s+(.+)$/gm, '<li>$1</li>');
+    text = text.replace(/<li>(.+?)<\/li>/g, '<ol><li>$1</li></ol>');
+
+    // Handle headings
+    text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    text = text.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    text = text.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+    // Handle paragraphs
+    text = text.replace(/\n\n/g, '</p><p>');
+    text = '<p>' + text + '</p>';
+
+    return text;
+}
+
+function escapeHTML(text) {
+    return text.replace(/[&<>"']/g, function(match) {
+        return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[match];
+    });
+}
+
+async function fetchWebpage(url) {
+    try {
+        const response = await axios.get(url, { timeout: 120000 });
+        if (response.status === 200) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(response.data, 'text/html');
+            const paragraphs = doc.querySelectorAll('p');
+            let text = '';
+            paragraphs.forEach(p => text += p.textContent + ' ');
+            if (text.length > 1000) {
+                text = text.substring(0, 1000) + '...';
+            }
+            return text;
+        } else {
+            return `Failed to fetch ${url}: HTTP ${response.status}`;
+        }
+    } catch (error) {
+        return `Error fetching ${url}: ${error.message}`;
+    }
+}
+
+async function fetchAllWebpages(urls) {
+    const contents = [];
+    for (const url of urls) {
+        const content = await fetchWebpage(url);
+        contents.push({ url, content });
+    }
+    return contents;
 }
 
 async function handleUserInput() {
@@ -288,20 +483,38 @@ async function handleUserInput() {
             throw new Error('Failed to parse search query response.');
         }
 
+        // Update topic
+        updateTopic(searchQuery);
+
         // Perform the search
-        const searchResponse = await axios.get('https://oevortex-webscout-api.hf.space/api/websearch-and-extract-threading', {
+        const searchResponse = await axios.get('https://oevortex-webscout-api.hf.space/api/search', {
             params: {
                 q: searchQuery,
                 max_results: 10,
-                safesearch: 'off',
+                safesearch: 'moderate',
                 region: 'wt-wt',
-                backend: 'html',
-                max_chars: 1000,
-                extract_only: true
+                backend: 'api'
             }
         });
 
-        searchResults = searchResponse.data;
+        searchResults = searchResponse.data.map(result => ({
+            title: result.title,
+            href: result.href,
+            body: result.body
+        }));
+
+        // Update sources
+        updateSources(searchResults.map(result => ({
+            title: result.title,
+            href: result.href
+        })));
+
+        // Update thinking message
+        thinkingMessage.textContent = 'Fetching webpage contents...';
+
+        // Extract URLs and fetch webpage contents
+        const urls = searchResults.map(result => result.href);
+        const webpageContents = await fetchAllWebpages(urls);
 
         // Update thinking message
         thinkingMessage.textContent = 'Answering your question...';
@@ -309,41 +522,15 @@ async function handleUserInput() {
         // Generate answer
         const answerResponse = await axios.get('https://abhaykoul-api.hf.space/api/llm', {
             params: {
-                model: 'Qwen/Qwen2-72B-Instruct',
-                message: `Question: ${question}\n\nSearch Results: ${JSON.stringify(searchResults)}\n\nPlease provide a comprehensive answer to the question based on the search results and webpage contents above. If the search results and webpage contents don't contain relevant information, please state that and provide the best answer you can based on your general knowledge.`
+                model: 'meta-llama/Meta-Llama-3.1-70B-Instruct',
+                message: `Question: ${question}\n\nSearch Results: ${JSON.stringify(searchResults)}\n\nWebpage Contents: ${JSON.stringify(webpageContents)}\n\nPlease provide a thorough and comprehensive answer to the question using the information from the search results and webpage contents above. Ensure the response is clear, detailed, and informative, avoiding any direct mentions of the search results or webpage contents as sources. If the provided information is insufficient or irrelevant, use your general knowledge to construct the best possible answer. Use Markdown formatting for better readability, including bold, italic, etc.`
             }
         });
 
         const answer = formatSourceLinks(answerResponse.data.response);
         lastAnswer = answer;
         thinkingMessage.remove();
-        addMessage(markdownToHtml(answer));
-
-        // Add follow-up buttons
-        const followUpContainer = document.createElement('div');
-        followUpContainer.classList.add('action-buttons');
-
-        const followUpButton = document.createElement('button');
-        followUpButton.classList.add('action-button');
-        followUpButton.textContent = 'Ask Follow-Up Question';
-        followUpButton.addEventListener('click', () => {
-            userInput.placeholder = 'Ask a follow-up question...';
-            userInput.focus();
-        });
-
-        const newSearchButton = document.createElement('button');
-        newSearchButton.classList.add('action-button');
-        newSearchButton.textContent = 'New Search';
-        newSearchButton.addEventListener('click', () => {
-            userInput.placeholder = 'Ask me anything...';
-            userInput.focus();
-            searchResults = null;
-            lastAnswer = null;
-        });
-
-        followUpContainer.appendChild(followUpButton);
-        followUpContainer.appendChild(newSearchButton);
-        chatMessages.appendChild(followUpContainer);
+        addMessage(answer);
 
     } catch (error) {
         console.error('Error:', error);
@@ -352,27 +539,17 @@ async function handleUserInput() {
     }
 }
 
-function markdownToHtml(markdown) {
-    // Simple Markdown to HTML conversion
-    return markdown
-        .replace(/^### (.+)/gm, '<h3>$1</h3>') // H3
-        .replace(/^## (.+)/gm, '<h2>$1</h2>') // H2
-        .replace(/^# (.+)/gm, '<h1>$1</h1>') // H1
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') // Bold
-        .replace(/\*(.+?)\*/g, '<em>$1</em>') // Italic
-        .replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>') // Links
-        .replace(/\n/g, '<br>'); // Line breaks
-}
-
 sendButton.addEventListener('click', handleUserInput);
 userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
         handleUserInput();
     }
 });
 
 // Initial greeting
-addMessage('👋 Welcome to the SearchWizard! I\'m here to help you with any questions you have. Whether it\'s about the latest research, technical queries, or just general information, feel free to ask. Let\'s get started!');
-    </script>
+addMessage('👋 Welcome to SearchWizard! I\'m here to help you with any questions you have. Whether it\'s about the latest research, technical queries, or just general information, feel free to ask. Let\'s get started!');
+</script>
+
 </body>
 </html>
