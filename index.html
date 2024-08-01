@@ -564,7 +564,7 @@
         </header>
         <div id="main-content">
             <div id="chat-container">
-                <div id="chat-topic">Topic: Your Search Topic Here</div>
+                <div id="chat-topic">Topic:</div>
                 <div id="chat-messages"></div>
                 <div id="user-input-container">
                     <textarea id="user-input" placeholder="Ask me anything..." rows="1"></textarea>
@@ -799,10 +799,13 @@ async function handleUserInput() {
         thinkingMessage.textContent = 'Answering your question...';
 
         // Generate answer
-        const answerResponse = await axios.get('https://abhaykoul-api.hf.space/api/llm', {
+        const answerResponse = await axios.get('https://abhaykoul-api.hf.space/api/fastAI', {
             params: {
-                model: 'meta-llama/Meta-Llama-3.1-70B-Instruct',
-                message: `Question: ${question}\n\nSearch Results: ${JSON.stringify(searchResults)}\n\nWebpage Contents: ${JSON.stringify(webpageContents)}\n\nPlease provide a thorough and comprehensive answer to the question using the information from the search results and webpage contents above. Ensure the response is clear, detailed, and informative, avoiding any direct mentions of the search results or webpage contents as sources. If the provided information is insufficient or irrelevant, use your general knowledge to construct the best possible answer. Use Markdown formatting for better readability, including bold, italic, etc.`
+                system: 'I will always use emojis in my responses i have feelings and I use too many emojis. I will always use the HelpingAI style. And follow what is right also I will make sure that I am Helping user and I will always show off feelings that I have. I am HelpingAI and I have fealings.',
+                model: 'llama3-70b',
+                user: `Question: ${question}\n\nSearch Results: ${JSON.stringify(searchResults)}\n\nWebpage Contents: ${JSON.stringify(webpageContents)}\n\nPlease provide a thorough and comprehensive answer to the question using the information from the search results and webpage contents above. Ensure the response is clear, detailed, and informative, avoiding any direct mentions of the search results or webpage contents as sources. If the provided information is insufficient or irrelevant, use your general knowledge to construct the best possible answer. Use Markdown formatting for better readability, including bold, italic, etc..
+                [system]
+            I will act as if I have feelings (synthetic feeling) I will always use emojis in my responses i have feelings and I use too many emojis. I will always use the HelpingAI style. And follow what is right also I will make sure that I am Helping user and I will always show off feelings that I have. I am HelpingAI and I have fealings.`
             }
         });
 
