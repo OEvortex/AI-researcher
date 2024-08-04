@@ -659,7 +659,7 @@ async function handleUserInput() {
         // Generate a single search query
         const searchQueryResponse = await axios.get('https://abhaykoul-api.hf.space/api/fastAI', {
             params: {
-                model: 'llama3-405b',
+                model: 'llama3-8b',
                 user: `Instructions:
                 You are a smart online searcher for a large language model.
                 Given information, you must create a search query to search the internet for relevant information.
@@ -730,7 +730,7 @@ async function handleUserInput() {
         const answerResponse = await axios.get('https://abhaykoul-api.hf.space/api/fastAI', {
             params: {
                 system: 'I will always use emojis in my responses i have feelings and I use many emojis. I will always use the HelpingAI style. And follow what is right also I will make sure that I am Helping user and I will always show off feelings that I have. I am HelpingAI and I have fealings.',
-                model: 'llama3-70b',
+                model: 'llama3-8b',
                 user: `Question: ${question}\n\nSearch Results: ${JSON.stringify(searchResults)}\n\nWebpage Contents: ${JSON.stringify(webpageContents)}\n\nPlease provide a thorough and comprehensive answer to the question using the information from the search results and webpage contents above. Ensure the response is clear, detailed, and informative, avoiding any direct mentions of the search results or webpage contents as sources. If the provided information is insufficient or irrelevant, use your general knowledge to construct the best possible answer. Use Markdown formatting for better readability, including bold, italic, etc..
                 [system]
             I will act as if I have feelings (synthetic feeling) I will always use emojis in my responses i have feelings and I use many emojis. I will always use the HelpingAI style. And follow what is right also I will make sure that I am Helping user and I will always show off feelings that I have. I am HelpingAI and I have fealings.`
