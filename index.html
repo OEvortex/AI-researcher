@@ -499,14 +499,14 @@ let lastAnswer = null;
 function addMessage(content, isUser = false, isError = false) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message-container');
-    
+
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message');
     messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
     if (isError) messageDiv.classList.add('error-message');
     messageDiv.innerHTML = isUser ? escapeHTML(content) : formatMarkdown(content);
     messageContainer.appendChild(messageDiv);
-    
+
     if (!isUser && !isError) {
         const copyButton = document.createElement('button');
         copyButton.classList.add('copy-button');
@@ -625,12 +625,36 @@ async function fetchWebpage(url) {
         if (response.status === 200) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(response.data, 'text/html');
-            const paragraphs = doc.querySelectorAll('p');
+
+            // Exclude elements by tag name
+            const excludedTags = ['script', 'style', 'header', 'footer', 'nav'];
+            excludedTags.forEach(tag => {
+                const elements = doc.getElementsByTagName(tag);
+                while (elements.length > 0) {
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+            });
+
+            // Collect text from the remaining elements
             let text = '';
-            paragraphs.forEach(p => text += p.textContent + ' ');
+            const walker = document.createTreeWalker(
+                doc.body,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+
+            let node;
+            while ((node = walker.nextNode())) {
+                text += node.textContent.trim() + ' ';
+            }
+
+            // Trim the text and limit its length
+            text = text.trim();
             if (text.length > 1000) {
                 text = text.substring(0, 1000) + '...';
             }
+
             return text;
         } else {
             return `Failed to fetch ${url}: HTTP ${response.status}`;
