@@ -681,9 +681,9 @@ async function handleUserInput() {
 
     try {
         // Generate a single search query
-        const searchQueryResponse = await axios.get('https://abhaykoul-api.hf.space/api/fastAI', {
+        const searchQueryResponse = await axios.get('https://oevortex-webscout-api.hf.space/api/chat', {
             params: {
-                model: 'llama3-8b',
+                model: 'gpt-4o-mini',
                 user: `Instructions:
                 You are a smart online searcher for a large language model.
                 Given information, you must create a search query to search the internet for relevant information.
