@@ -702,8 +702,8 @@ async function handleUserInput() {
 
         let searchQuery;
         try {
-            console.log('Search Query Response:', searchQueryResponse.data.response);
-            const parsedResponse = JSON.parse(searchQueryResponse.data.response);
+            console.log('Search Query Response:', searchQueryResponse.data);
+            const parsedResponse = JSON.parse(searchQueryResponse.data);
             if (parsedResponse && parsedResponse.search_query) {
                 searchQuery = parsedResponse.search_query;
             } else {
@@ -758,7 +758,7 @@ async function handleUserInput() {
             }
         });
 
-        const answer = formatSourceLinks(answerResponse.data.response);
+        const answer = formatSourceLinks(answerResponse.data);
         lastAnswer = answer;
         thinkingMessage.remove();
         addMessage(answer);
